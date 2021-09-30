@@ -1,0 +1,2 @@
+- este video explica las diferencias entre : async-await => fetch => axios  .... https://www.youtube.com/watch?v=stiPdlSkTOI
+- me guio para el login con google :  https://www.youtube.com/results?search_query=traversy+media+google+auth+
