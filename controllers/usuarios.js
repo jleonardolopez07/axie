@@ -33,8 +33,8 @@ const usuariosPost = async(req, res = response) => {
     //Encriptar la contrasena
     const salt = bcryptjs.genSaltSync();
     usuario.password = bcryptjs.hashSync(password, salt)
-
-    //guardar en DB
+    usuario.nombre = usuario.nombre.toUpperCase()
+        //guardar en DB
     await usuario.save();
 
     res.json({
@@ -45,13 +45,13 @@ const usuariosPost = async(req, res = response) => {
 
 const usuariosPut = async(req, res = response) => {
     const { id } = req.params;
-    const { _id, password, google, correo, ...resto } = req.body;
+    const { _id, google, ...resto } = req.body;
 
     //TODO validar contra base de datos
-    if (password) {
+    if (resto) {
         //Encriptar la contrasena
         const salt = bcryptjs.genSaltSync();
-        resto.password = bcryptjs.hashSync(password, salt)
+        resto.password = bcryptjs.hashSync(resto.password, salt)
     }
     const usuario = await Usuario.findByIdAndUpdate(id, resto)
 

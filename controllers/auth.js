@@ -3,6 +3,7 @@ const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/usuarios');
 const { generarJWT } = require("../helpers/generar-jwt");
 const { googleVerify } = require("../helpers/google-verify");
+const Becado = require("../models/becado");
 
 const login = async(req, res = response) => {
     const { correo, password } = req.body;
@@ -91,7 +92,36 @@ const googleSignIn = async(req, res = response) => {
 
 }
 
+const becadoLogin = async(req, res = response) => {
+    const { nombre = '', becario = '' } = req.body;
+    try {
+        const becado = await Becado.findOne({ nombre }).populate('usuario', 'nombre')
+            //console.log(becado);
+        const usuarioInfo = becado.usuario.nombre
+            //console.log(usuarioInfo);
+            /*         if (!becado) {
+                        return res.status(401).json({
+                            msg: `No existe el becado ${nombre}`
+                        })
+                    } */
+        if (usuarioInfo !== becario) {
+            return res.status(401).json({
+                msg: `${becario} no es Becario valido - Por favor verifique el nombre de su becario`
+            })
+        }
+        res.json({
+            msg: becado
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Hable con el administrador'
+        })
+    }
+}
+
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    becadoLogin
 }
